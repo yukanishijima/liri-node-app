@@ -1,3 +1,4 @@
+// Read and set environment variables
 require("dotenv").config();
 const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
@@ -7,8 +8,7 @@ const action = process.argv[2];
 const nodeArgs = process.argv;
 let value = "";
 
-// loop through all the words in the node argument
-// add "+" in between arguments
+// loop through all the words in the node argument and add "+" in between arguments
 for (var i = 3; i < nodeArgs.length; i++) {
 
   if (i > 3 && i < nodeArgs.length) {
@@ -20,30 +20,47 @@ for (var i = 3; i < nodeArgs.length; i++) {
 console.log(value);
 
 switch (action) {
-case "concert-this":
-  showConcert();
-  break;
-
-case "spotify-this-song":
-  showSpotify();
-  break;
-
-case "movie-this":
-  showMovie();
-  break;
-
-case "do-what-it-says":
-  doWhatItSays ();
-  break;
+  case "concert-this":
+    showConcert();
+    break;
+  case "spotify-this-song":
+    showSpotify();
+    break;
+  case "movie-this":
+    showMovie();
+    break;
+  case "do-what-it-says":
+    doWhatItSays();
+    break;
 }
 
+function showConcert() {
+  let queryUrl = "https://rest.bandsintown.com/artists/" + value + "/events?app_id=codingbootcamp";
+
+  axios.get(queryUrl).then(function (response) {
+    // console.log(JSON.stringify(response, null, 2));  //returns error 
+    console.log(response);
+    console.log(response.data[0].venue);
+    const responseObj = response.data[0];
+    const name = responseObj.venue.name;
+    const city = responseObj.venue.city;
+    const country = responseObj.venue.country;
+    const date = responseObj.datetime;
+
+    console.log(`------------------ \nThe artist: ${value} \nThe venue: ${name} \nThe location: ${city}, ${country} \nThe date: ${date}`);
+
+  })
+    .catch(function (err) {
+      console.log(err);
+    });
+}
 
 function showSpotify() {
   var spotify = new Spotify(keys.spotify);
 
   spotify
-    .search({ type: "track", query: `"${value}"`, limit: "2"})
-    .then(function(response) {
+    .search({ type: "track", query: `"${value}"`, limit: "2" })
+    .then(function (response) {
 
       for (let i = 0; i < response.tracks.items.length; i++) {
         // console.log(response.tracks.items[i]);
@@ -52,11 +69,11 @@ function showSpotify() {
         const artists = responseObj.artists[0].name;
         const link = responseObj.preview_url;
         const album = responseObj.album.name;
-        
+
         console.log(`------------------ \nThe artist: ${artists} \nThe name of the song: ${name} \nA preview link: ${link} \nThe album: ${album}`);
       }
     })
-    .catch(function(error) {
+    .catch(function (error) {
       // console.log(error);
       if (error.response) {
         // The request was made and the server responded with a status code
