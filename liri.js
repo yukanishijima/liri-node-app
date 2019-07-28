@@ -1,4 +1,3 @@
-// Read and set environment variables
 require("dotenv").config();
 const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
@@ -11,44 +10,50 @@ let value = "";
 
 // loop through all the words in the node argument and add "+" in between arguments
 for (var i = 3; i < nodeArgs.length; i++) {
-
   if (i > 3 && i < nodeArgs.length) {
     value = value + "+" + nodeArgs[i];
   } else {
     value += nodeArgs[i];
   }
 }
-console.log(value);
+// console.log(value);
 
-switch (action) {
-  case "concert-this":
-    if (value) {
-      showConcert();
-    } else {
-      console.log("Please enter a name of artists!");
-    }
-    break;
+if (!action) {
+  console.log(`\n>> Hi, this is LIRI. Nice to meet you :) Please enter your command to begin!
+  \nSearch concerts  -->  node liri.js concert-this <enter artists> \nSearch songs  -->  node liri.js spotify-this-song <enter a song> \nSearch movies  -->  node liri.js movie-this <enter a movie> \nSurprise!  -->  node liri.js do-what-it-says \n`);
+} else {
 
-  case "spotify-this-song":
-    if (value) {
-      showSpotify(value);
-    } else {
-      showSpotify("The Sign ace of base");
-    }
-    break;
+  switch (action) {
+    case "concert-this":
+      if (value) {
+        showConcert();
+      } else {
+        console.log("\n>> Please enter a name of artists :) \n");
+      }
+      break;
 
-  case "movie-this":
-    if (value) {
-      showMovie(value);
-    } else {
-      console.log("If you haven't watched \"Mr. Nobody,\" then you should: http://www.imdb.com/title/tt0485947/");
-      showMovie("Mr. Nobody");
-    }
-    break;
+    case "spotify-this-song":
+      if (value) {
+        showSpotify(value);
+      } else {
+        console.log("\n>> The Sign is the default setting. Please enter a song :)\n")
+        showSpotify("The Sign ace of base");
+      }
+      break;
 
-  case "do-what-it-says":
-    doWhatItSays();
-    break;
+    case "movie-this":
+      if (value) {
+        showMovie(value);
+      } else {
+        console.log("\n>> \"Mr. Nobody\" is the default setting. Please enter a movie :)\n");
+        showMovie("Mr. Nobody");
+      }
+      break;
+
+    case "do-what-it-says":
+      doWhatItSays();
+      break;
+  }
 }
 
 function showConcert() {
@@ -66,7 +71,7 @@ function showConcert() {
       const country = responseObj.venue.country;
       const date = responseObj.datetime;
 
-      console.log(`------------------ \nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date}`);
+      console.log(`---------------------\nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date} \n---------------------`);
 
     })
     .catch(function (err) {
@@ -78,8 +83,10 @@ function showSpotify(value) {
   var spotify = new Spotify(keys.spotify);
 
   spotify
-    .search({ type: "track", query: `"${value}"`, limit: "1" })
+    .search({ type: "track", query: `"${value}"`, limit: "3" })
     .then(function (response) {
+
+      console.log("\n>> Here are the top 3 results! \n\n---------------------");
 
       for (let i = 0; i < response.tracks.items.length; i++) {
         // console.log(response.tracks.items[i]);
@@ -89,29 +96,11 @@ function showSpotify(value) {
         const link = responseObj.preview_url;
         const album = responseObj.album.name;
 
-        console.log(`------------------ \nArtist: ${artists} \nName of the song: ${name} \nPreview link: ${link} \nAlbum: ${album}`);
+        console.log(`Artist: ${artists} \nName of the song: ${name} \nPreview link: ${link} \nAlbum: ${album} \n---------------------`);
       }
     })
-    .catch(function (error) {
-      // console.log(error);
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log("---------------Data---------------");
-        console.log(error.response.data);
-        console.log("---------------Status---------------");
-        console.log(error.response.status);
-        console.log("---------------Status---------------");
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an object that comes back with details pertaining to the error that occurred.
-        console.log(error.request);
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log("Error", error.message);
-      }
-      console.log(error.config);
+    .catch(function (err) {
+      console.log(err);
     });
 };
 
@@ -130,7 +119,7 @@ function showMovie(value) {
       const plot = response.data.Plot;
       const actors = response.data.Actors;
 
-      console.log(`------------------ \nTitle: ${title} \nYear: ${year} \nRating: ${rating} \nRotten Tomatoes rating: ${rottenTomatoes} \nCountry: ${country} \nLanguage: ${lang} \nPlot: ${plot} \nActors: ${actors}`)
+      console.log(`---------------------\nTitle: ${title} \nYear: ${year} \nRating: ${rating} \nRotten Tomatoes rating: ${rottenTomatoes} \nCountry: ${country} \nLanguage: ${lang} \nPlot: ${plot} \nActors: ${actors} \n---------------------`)
     })
     .catch(function (err) {
       console.log(err);
@@ -143,6 +132,7 @@ function doWhatItSays() {
       return console.log(error);
     }
     const dataArr = data.split(",");
+    console.log(`\n>> Let's check out ${dataArr[1]}!`);
     // console.log(data);
     // console.log(dataArr[0]);
 
