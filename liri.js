@@ -9,10 +9,10 @@ const action = process.argv[2];
 const nodeArgs = process.argv;
 let value = "";
 
-// loop through all the words in the node argument and add "+" in between arguments
+// loop through all the words in the node argument and add " " in between arguments
 for (var i = 3; i < nodeArgs.length; i++) {
   if (i > 3 && i < nodeArgs.length) {
-    value = value + "+" + nodeArgs[i];
+    value = value + " " + nodeArgs[i];
   } else {
     value += nodeArgs[i];
   }
@@ -66,14 +66,20 @@ function showConcert() {
       // console.log(JSON.stringify(response, null, 2));  //returns error 
       // console.log(response);
       // console.log(response.data[0].venue);
-      const responseObj = response.data[0];
-      const name = responseObj.venue.name;
-      const city = responseObj.venue.city;
-      const country = responseObj.venue.country;
-      const date = moment(responseObj.datetime).format("MM/DD/YYYY");
 
-      console.log(`---------------------\nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date} \n---------------------`);
+      if (response.data[0] === undefined) {
+        console.log(`\n>> Sorry there's no concert found for "${value}". Try another artist :) \n`);
+        return
+      } else {
 
+        const responseObj = response.data[0];
+        const name = responseObj.venue.name;
+        const city = responseObj.venue.city;
+        const country = responseObj.venue.country;
+        const date = moment(responseObj.datetime).format("MM/DD/YYYY");
+
+        console.log(`---------------------\nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date} \n---------------------`);
+      }
     })
     .catch(function (err) {
       console.log(err);
