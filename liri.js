@@ -3,6 +3,7 @@ const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
 const axios = require("axios");
 const fs = require("fs");
+var moment = require('moment');
 
 const action = process.argv[2];
 const nodeArgs = process.argv;
@@ -69,7 +70,7 @@ function showConcert() {
       const name = responseObj.venue.name;
       const city = responseObj.venue.city;
       const country = responseObj.venue.country;
-      const date = responseObj.datetime;
+      const date = moment(responseObj.datetime).format("MM/DD/YYYY");
 
       console.log(`---------------------\nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date} \n---------------------`);
 
