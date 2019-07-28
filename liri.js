@@ -21,14 +21,30 @@ console.log(value);
 
 switch (action) {
   case "concert-this":
-    showConcert();
+    if (value) {
+      showConcert();
+    } else {
+      console.log("Please enter a name of artists!");
+    }
     break;
+
   case "spotify-this-song":
-    showSpotify();
+    if (value) {
+      showSpotify(value);
+    } else {
+      showSpotify("The Sign ace of base");
+    }
     break;
+
   case "movie-this":
-    showMovie();
+    if (value) {
+      showMovie(value);
+    } else {
+      console.log("If you haven't watched \"Mr. Nobody,\" then you should: http://www.imdb.com/title/tt0485947/")
+      showMovie("Mr. Nobody");
+    }
     break;
+
   case "do-what-it-says":
     doWhatItSays();
     break;
@@ -57,11 +73,11 @@ function showConcert() {
     });
 }
 
-function showSpotify() {
+function showSpotify(value) {
   var spotify = new Spotify(keys.spotify);
 
   spotify
-    .search({ type: "track", query: `"${value}"`, limit: "2" })
+    .search({ type: "track", query: `"${value}"`, limit: "1" })
     .then(function (response) {
 
       for (let i = 0; i < response.tracks.items.length; i++) {
@@ -98,7 +114,7 @@ function showSpotify() {
     });
 };
 
-function showMovie() {
+function showMovie(value) {
   let queryUrl = "http://www.omdbapi.com/?t=" + value + "&y=&plot=short&apikey=trilogy";
   axios
     .get(queryUrl)
