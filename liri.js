@@ -37,19 +37,21 @@ switch (action) {
 function showConcert() {
   let queryUrl = "https://rest.bandsintown.com/artists/" + value + "/events?app_id=codingbootcamp";
 
-  axios.get(queryUrl).then(function (response) {
-    // console.log(JSON.stringify(response, null, 2));  //returns error 
-    console.log(response);
-    console.log(response.data[0].venue);
-    const responseObj = response.data[0];
-    const name = responseObj.venue.name;
-    const city = responseObj.venue.city;
-    const country = responseObj.venue.country;
-    const date = responseObj.datetime;
+  axios
+    .get(queryUrl)
+    .then(function (response) {
+      // console.log(JSON.stringify(response, null, 2));  //returns error 
+      console.log(response);
+      console.log(response.data[0].venue);
+      const responseObj = response.data[0];
+      const name = responseObj.venue.name;
+      const city = responseObj.venue.city;
+      const country = responseObj.venue.country;
+      const date = responseObj.datetime;
 
-    console.log(`------------------ \nThe artist: ${value} \nThe venue: ${name} \nThe location: ${city}, ${country} \nThe date: ${date}`);
+      console.log(`------------------ \nArtist: ${value} \nVenue: ${name} \nLocation: ${city}, ${country} \nDate: ${date}`);
 
-  })
+    })
     .catch(function (err) {
       console.log(err);
     });
@@ -70,7 +72,7 @@ function showSpotify() {
         const link = responseObj.preview_url;
         const album = responseObj.album.name;
 
-        console.log(`------------------ \nThe artist: ${artists} \nThe name of the song: ${name} \nA preview link: ${link} \nThe album: ${album}`);
+        console.log(`------------------ \nArtist: ${artists} \nName of the song: ${name} \nPreview link: ${link} \nAlbum: ${album}`);
       }
     })
     .catch(function (error) {
@@ -96,5 +98,25 @@ function showSpotify() {
     });
 };
 
+function showMovie() {
+  let queryUrl = "http://www.omdbapi.com/?t=" + value + "&y=&plot=short&apikey=trilogy";
+  axios
+    .get(queryUrl)
+    .then(function (response) {
+      console.log(response.data);
 
+      const title = response.data.Title;
+      const year = response.data.Year;
+      const rating = response.data.Rated;
+      const rottenTomatoes = response.data.Ratings[1].Value;
+      const country = response.data.Country;
+      const lang = response.data.Language;
+      const plot = response.data.Plot;
+      const actors = response.data.Actors;
 
+      console.log(`------------------ \nTitle: ${title} \nYear: ${year} \nRating: ${rating} \nRotten Tomatoes rating: ${rottenTomatoes} \nCountry: ${country} \nLanguage: ${lang} \nPlot: ${plot} \nActors: ${actors}`)
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+};
