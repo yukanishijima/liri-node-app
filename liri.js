@@ -3,6 +3,7 @@ require("dotenv").config();
 const keys = require("./keys.js");
 const Spotify = require('node-spotify-api');
 const axios = require("axios");
+const fs = require("fs");
 
 const action = process.argv[2];
 const nodeArgs = process.argv;
@@ -40,7 +41,7 @@ switch (action) {
     if (value) {
       showMovie(value);
     } else {
-      console.log("If you haven't watched \"Mr. Nobody,\" then you should: http://www.imdb.com/title/tt0485947/")
+      console.log("If you haven't watched \"Mr. Nobody,\" then you should: http://www.imdb.com/title/tt0485947/");
       showMovie("Mr. Nobody");
     }
     break;
@@ -57,8 +58,8 @@ function showConcert() {
     .get(queryUrl)
     .then(function (response) {
       // console.log(JSON.stringify(response, null, 2));  //returns error 
-      console.log(response);
-      console.log(response.data[0].venue);
+      // console.log(response);
+      // console.log(response.data[0].venue);
       const responseObj = response.data[0];
       const name = responseObj.venue.name;
       const city = responseObj.venue.city;
@@ -119,8 +120,7 @@ function showMovie(value) {
   axios
     .get(queryUrl)
     .then(function (response) {
-      console.log(response.data);
-
+      // console.log(response.data);
       const title = response.data.Title;
       const year = response.data.Year;
       const rating = response.data.Rated;
@@ -135,4 +135,29 @@ function showMovie(value) {
     .catch(function (err) {
       console.log(err);
     });
+};
+
+function doWhatItSays() {
+  fs.readFile("random.txt", "utf8", function (error, data) {
+    if (error) {
+      return console.log(error);
+    }
+    const dataArr = data.split(",");
+    // console.log(data);
+    // console.log(dataArr[0]);
+
+    switch (dataArr[0]) {
+      case "concert-this":
+        showConcert(dataArr[1]);
+        break;
+
+      case "spotify-this-song":
+        showSpotify(dataArr[1]);
+        break;
+
+      case "movie-this":
+        showMovie(dataArr[1]);
+        break;
+    }
+  });
 };
