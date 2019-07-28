@@ -20,8 +20,8 @@ for (var i = 3; i < nodeArgs.length; i++) {
 // console.log(value);
 
 if (!action) {
-  console.log(`\n>> Hi, this is LIRI. Nice to meet you :) Please enter your command to begin!
-  \nSearch concerts  -->  node liri.js concert-this <enter artists> \nSearch songs  -->  node liri.js spotify-this-song <enter a song> \nSearch movies  -->  node liri.js movie-this <enter a movie> \nSurprise!  -->  node liri.js do-what-it-says \n`);
+  console.log(`\n>> Hi, this is LIRI. Nice to meet you :) Please enter a command to begin!
+  \nSearch concerts  -->  node liri.js concert-this <enter artist name> \nSearch songs  -->  node liri.js spotify-this-song <enter song title> \nSearch movies  -->  node liri.js movie-this <enter movie title> \nSurprise!  -->  node liri.js do-what-it-says \n`);
 } else {
 
   switch (action) {
@@ -29,7 +29,7 @@ if (!action) {
       if (value) {
         showConcert();
       } else {
-        console.log("\n>> Please enter a name of artists :) \n");
+        console.log("\n>> Please enter the name of an artist :) \n");
       }
       break;
 
@@ -37,8 +37,8 @@ if (!action) {
       if (value) {
         showSpotify(value);
       } else {
-        console.log("\n>> The Sign is the default setting. Please enter a song :)\n")
-        showSpotify("The Sign ace of base");
+        console.log("\n>> \"I miss the thing\" is the default setting. Please enter a song title :)")
+        showSpotify("I Miss the Things - Stephen Rigmaiden");
       }
       break;
 
@@ -46,8 +46,8 @@ if (!action) {
       if (value) {
         showMovie(value);
       } else {
-        console.log("\n>> \"Mr. Nobody\" is the default setting. Please enter a movie :)\n");
-        showMovie("Mr. Nobody");
+        console.log("\n>> \"Kill Bill\" is the default setting. Please enter a movie title :)\n");
+        showMovie("kill bill");
       }
       break;
 
@@ -84,20 +84,23 @@ function showSpotify(value) {
   var spotify = new Spotify(keys.spotify);
 
   spotify
-    .search({ type: "track", query: `"${value}"`, limit: "3" })
+    .search({ type: "track", query: `"${value}"`, limit: "2" })
     .then(function (response) {
+      // console.log(response.tracks.items[0])
+      if (response.tracks.items[0] === undefined) {
+        console.log("\n>> There is no such song. Try again :) \n");
+        return
+      } else {
+        console.log("\n>> Here are the top 2 results! \n\n---------------------");
 
-      console.log("\n>> Here are the top 3 results! \n\n---------------------");
-
-      for (let i = 0; i < response.tracks.items.length; i++) {
-        // console.log(response.tracks.items[i]);
-        const responseObj = response.tracks.items[i];
-        const name = responseObj.name;
-        const artists = responseObj.artists[0].name;
-        const link = responseObj.preview_url;
-        const album = responseObj.album.name;
-
-        console.log(`Artist: ${artists} \nName of the song: ${name} \nPreview link: ${link} \nAlbum: ${album} \n---------------------`);
+        for (let i = 0; i < response.tracks.items.length; i++) {
+          // console.log(response.tracks.items[i]);
+          const name = response.tracks.items[i].name;
+          const artists = response.tracks.items[i].artists[0].name;
+          const link = response.tracks.items[i].preview_url;
+          const album = response.tracks.items[i].album.name;
+          console.log(`Artist: ${artists} \nName of the song: ${name} \nPreview link: ${link} \nAlbum: ${album} \n---------------------`);
+        }
       }
     })
     .catch(function (err) {
