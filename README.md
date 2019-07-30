@@ -1,4 +1,4 @@
-# LIRI Bot
+# LIRI Bot🤖
 
 LIRI stands for a Language Interpretation and Recognition Interface. LIRI is a command line node app that will help you search for concerts, music, and movies on your terminal! Responding to your command line, she’ll take in parameters and give you back the data.  
 
@@ -8,7 +8,7 @@ With the command ```node liri.js```, you will be welcomed by LIRI and given 4 co
 
 ![gif](https://github.com/yukanishijima/liri-node-app/blob/master/images/introduction.gif/)  
 
-### Search for concerts
+### 1️⃣ Search for concerts
 
 Enter a name of an artist followed by the command ```node liri.js concert-this```, LIRI will search for concerts using the Bands in Town API and give you back the data. The date of the concert will be in the format of DD/MM/YYYY. 
 
@@ -18,7 +18,7 @@ If you don’t enter any artist, LIRI will remind you to enter it.
 
 ![image](https://github.com/yukanishijima/liri-node-app/blob/master/images/concert-this-2.png)
 
-### Search for music
+### 2️⃣ Search for music
 
 Enter a name of a song followed by the command line ```node liri.js spotify-this-song```, LIRI will search for the song using the spotify API and give you the top 2 search results of the song. 
 
@@ -28,7 +28,7 @@ If no song is provided after the command line, LIRI will show you the default se
 
 ![image](https://github.com/yukanishijima/liri-node-app/blob/master/images/spotify-this-song-2.png)
 
-### Search for movies
+### 3️⃣ Search for movies
 
 Enter a name of a movie followed by the command ```node liri.js movie-this```, LIRI will use axios to retrieve data from the OMDB API and display it for you on the terminal. 
 
@@ -38,7 +38,7 @@ If there’s no movie provided after the command line, you will be given a searc
 
 ![image](https://github.com/yukanishijima/liri-node-app/blob/master/images/movie-this-2.png)
 
-### Surprise!
+### 4️⃣ Surprise!
 
 The command line ```node liri.js do-what-it-says``` will read random.txt, take in the command line that is written there, and give you the search result of whatever the command line says. LIRI uses the fs Node package for this feature.
 
